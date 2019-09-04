@@ -33,7 +33,7 @@
    - name: Copy Environment file for Tomcat
      copy:
        src: setenv.sh
-       dest: "{{apache_home}}/bin"
+       dest: "{{archives_home}}/apache-tomcat-9.0.24/bin"
        mode: 0755
 
    - name:
@@ -45,3 +45,8 @@
         - {source: server.xml.j2, target: "{{apache_home}}/conf/server.xml"}
         - {source: tomcat-users.xml.j2, target: "{{apache_home}}/conf/tomcat-users.xml"}
      notify: Start Tomcat Service
+
+   - name:
+     copy:
+       src: "{{tomcat_home}}/sowtracker"
+       dest: "{{apache_home}}/webapps/"
