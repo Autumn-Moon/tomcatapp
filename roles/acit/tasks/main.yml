@@ -1,0 +1,47 @@
+   - name: Create Folders
+     file:
+       path: "{{item}}"
+       state: directory
+       mode: 0755
+     with_items:
+       - "{{ansible_downloads}}"
+       - "{{archives_home}}"
+
+   - name: Install JDK
+     yum:
+      name: java-1.8.0-openjdk-devel
+      state: present
+
+   - name: Download Tomcat Server
+     get_url:
+       url: https://www-us.apache.org/dist/tomcat/tomcat-9/v9.0.24/bin/apache-tomcat-9.0.24.tar.gz
+       dest: "{{ansible_downloads}}"
+
+   - name: Unarchive Tomcat Server
+     unarchive:
+       src: "{{ansible_downloads}}/apache-tomcat-9.0.24.tar.gz"
+       dest: "{{archives_home}}"
+
+   - name: Attempt to change ownership on directory
+     file:
+       path: "{{archives_home}}/apache-tomcat-9.0.24"
+       state: directory
+       recurse: yes
+       owner: ansadmin
+       group: ansadmin      
+
+   - name: Copy Environment file for Tomcat
+     copy:
+       src: setenv.sh
+       dest: "{{apache_home}}/bin"
+       mode: 0755
+
+   - name:
+     template:
+       src: "{{item.source}}"
+       dest: "{{item.target}}"
+       mode: 0755
+     with_items:
+        - {source: server.xml.j2, target: "{{apache_home}}/conf/server.xml"}
+        - {source: tomcat-users.xml.j2, target: "{{apache_home}}/conf/tomcat-users.xml"}
+     notify: Start Tomcat Service

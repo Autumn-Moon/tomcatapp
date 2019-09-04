@@ -1,0 +1,8 @@
+---
+# vars file for roles/acit
+tomcat_home: /home/ansadmin/tomcatapp
+ansible_downloads: "{{tomcat_home}}/downloads"
+archives_home: "{{tomcat_home}}/bin"
+apache_home: "{{archives_home}}/apache-tomcat-9.0.24"
+tomcat_port: 8080 
+
