@@ -37,6 +37,11 @@
        mode: 0755
 
    - name:
+     copy:
+       src: "{{tomcat_home}}/sowtracker"
+       dest: "{{apache_home}}/webapps/"
+
+   - name:
      template:
        src: "{{item.source}}"
        dest: "{{item.target}}"
@@ -45,8 +50,3 @@
         - {source: server.xml.j2, target: "{{apache_home}}/conf/server.xml"}
         - {source: tomcat-users.xml.j2, target: "{{apache_home}}/conf/tomcat-users.xml"}
      notify: Start Tomcat Service
-
-   - name:
-     copy:
-       src: "{{tomcat_home}}/sowtracker"
-       dest: "{{apache_home}}/webapps/"
