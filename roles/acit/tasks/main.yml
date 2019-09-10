@@ -36,17 +36,16 @@
        dest: "{{archives_home}}/apache-tomcat-9.0.24/bin"
        mode: 0755
 
-   - name:
+   - name: Copy application files to WebApps Folder
      copy:
        src: "{{tomcat_home}}/sowtracker"
        dest: "{{apache_home}}/webapps/"
 
-   - name:
+   - name: Change port number of tomcat app
      template:
        src: "{{item.source}}"
        dest: "{{item.target}}"
        mode: 0755
      with_items:
         - {source: server.xml.j2, target: "{{apache_home}}/conf/server.xml"}
-        - {source: tomcat-users.xml.j2, target: "{{apache_home}}/conf/tomcat-users.xml"}
      notify: Start Tomcat Service
